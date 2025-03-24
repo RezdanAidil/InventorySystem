@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 13, 2025 at 09:56 AM
+-- Generation Time: Mar 24, 2025 at 09:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,12 +40,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`ProductID`, `Name`, `Quantity`, `Price`, `Supplier`) VALUES
-(1, 'Laptop', 15, 800.00, 'Tech Solutions'),
+(1, 'Laptop', 125, 800.00, 'Tech Solutions'),
 (2, 'Smartphone	', 25, 500.00, 'Mobile Hub'),
 (3, 'Keyboard', 30, 40.00, 'Peripherals Inc.'),
-(4, 'Mouse', 50, 20.00, 'Peripherals Inc.'),
-(5, 'Monitor', 20, 150.00, 'Display World'),
-(6, 'USB Drive', 100, 15.00, 'Storage King');
+(4, 'Mouse', 268, 20.00, 'Peripherals Inc.'),
+(5, 'Monitor', 15, 150.00, 'Display World');
 
 -- --------------------------------------------------------
 
@@ -56,9 +55,9 @@ INSERT INTO `products` (`ProductID`, `Name`, `Quantity`, `Price`, `Supplier`) VA
 CREATE TABLE `transactions` (
   `TransactionID` int(11) NOT NULL,
   `ProductID` int(11) NOT NULL,
-  `Transaction_Type` enum('IN','OUT') NOT NULL,
-  `Quantity` int(11) NOT NULL CHECK (`Quantity` > 0),
-  `Date` datetime NOT NULL DEFAULT current_timestamp(),
+  `Transaction_Type` varchar(50) NOT NULL,
+  `Quantity` int(11) NOT NULL,
+  `Date` datetime NOT NULL,
   `ProductName` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -67,7 +66,14 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`TransactionID`, `ProductID`, `Transaction_Type`, `Quantity`, `Date`, `ProductName`) VALUES
-(1, 1, 'IN', 10, '2025-03-13 14:14:00', 'Laptop');
+(3, 1, 'IN', 50, '2025-03-18 02:06:04', 'Laptop'),
+(4, 4, 'OUT', 12, '2025-03-18 02:28:55', 'Mouse'),
+(13, 4, 'OUT', 2, '2025-03-22 07:19:12', 'Mouse'),
+(14, 1, 'OUT', 5, '2025-03-22 07:23:15', 'Laptop'),
+(15, 1, 'IN', 65, '2025-03-22 07:23:21', 'Laptop'),
+(16, 4, 'IN', 232, '2025-03-25 03:00:00', 'Mouse'),
+(17, 5, 'IN', 10, '2025-03-25 03:47:53', 'Monitor'),
+(18, 5, 'OUT', 15, '2025-03-25 03:48:27', 'Monitor');
 
 --
 -- Indexes for dumped tables
@@ -94,13 +100,13 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `TransactionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `TransactionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables
