@@ -1,0 +1,113 @@
+﻿@model List<InventorySystem.Models.Product>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-light"><i class="fas fa-box"></i> Product List</h1>
+        <a class="btn btn-primary shadow-sm transition-scale" href="/Product/Create">
+            <i class="fas fa-plus"></i> Add New Product
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-bordered shadow-lg animate-fade-in">
+            <thead class="thead-light">
+                <tr>
+                    <th><i class="fas fa-barcode"></i> Product ID</th>
+                    <th><i class="fas fa-tag"></i> Name</th>
+                    <th><i class="fas fa-boxes"></i> Quantity</th>
+                    <th><i class="fas fa-dollar-sign"></i> Price (RM)</th>
+                    <th><i class="fas fa-truck"></i> Supplier</th>
+                    <th><i class="fas fa-edit"></i> Edit</th>
+                    <th><i class="fas fa-trash-alt"></i> Delete</th>
+                </tr>
+            </thead>
+            <tbody id="productTable">
+                @foreach (var product in Model)
+                {
+                    <tr id="row-@product.ProductID">
+                        <td>@product.ProductID</td>
+                        <td>@product.Name</td>
+                        <td>@product.Quantity</td>
+                        <td>RM @product.Price.ToString("N2")</td>
+                        <td>@product.Supplier</td>
+
+                        <!-- Edit Button -->
+                        <td>
+                            <a href="/Product/Edit/@product.ProductID" class="btn btn-sm btn-warning transition-scale">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        </td>
+
+                        <!-- Delete Button -->
+                        <td>
+                            <button class="btn btn-sm btn-danger transition-scale" onclick="deleteProduct(@product.ProductID)">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function deleteProduct(productId) {
+        if (!confirm("Are you sure you want to delete this product?")) {
+            return;
+        }
+
+        fetch(`/Product/Delete/${productId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById(`row-${productId}`).remove(); // Remove row from table
+            } else {
+                alert("Failed to delete product.");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+</script>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .transition-scale {
+        transition: transform 0.3s ease;
+    }
+
+        .transition-scale:hover {
+            transform: scale(1.05);
+        }
+
+    .table-dark {
+        background-color: #1e1e1e;
+    }
+
+        .table-dark th, .table-dark td {
+            border-color: #444;
+            text-align: center;
+        }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+</style>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<InventorySystem.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-light">Transaction History</h2>
+        <a asp-action="Create" class="btn btn-primary shadow-sm transition-scale">New Transaction</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-bordered shadow-lg animate-fade-in rounded-table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Product Name</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+              
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transaction in Model)
+                {
+                    <tr>
+                        <td>@transaction.TransactionID</td>
+                        <td>@transaction.Product.Name</td>
+                        <td class="fw-bold @(transaction.Transaction_Type == "IN" ? "text-success" : "text-danger")">
+                            @(transaction.Transaction_Type == "IN" ? "IN (Stock Added)" : "OUT (Stock Removed)")
+                        </td>
+                        <td>@transaction.Quantity</td>
+                        <td>@transaction.Date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

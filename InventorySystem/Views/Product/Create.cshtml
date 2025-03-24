@@ -1,0 +1,70 @@
+﻿@model InventorySystem.Models.Product
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<div class="container mt-5">
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h1 class="text-light">Add New Product</h1>
+        <p class="text">Fill in the details below to add a new product to the inventory.</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card bg-dark text-white shadow-lg p-4">
+        <div class="card-body">
+            <form method="post" asp-action="Create" asp-controller="Product">
+                @Html.AntiForgeryToken()
+
+                <!-- Product Name -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-light"><i class="fas fa-tag text-primary"></i> Product Name:</label>
+                    <input type="text" class="form-control bg-secondary text-white border-0 rounded" asp-for="Name" placeholder="Enter product name" required />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-light"><i class="fas fa-sort-numeric-up text-success"></i> Quantity:</label>
+                    <input type="number" class="form-control bg-secondary text-white border-0 rounded" asp-for="Quantity" placeholder="Enter quantity" required />
+                    <span class="text-danger" asp-validation-for="Quantity"></span>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-light"><i class="fas fa-dollar-sign text-warning"></i> Price (RM):</label>
+                    <input type="number" class="form-control bg-secondary text-white border-0 rounded" asp-for="Price" step="0.01" placeholder="Enter price" required />
+                    <span class="text-danger" asp-validation-for="Price"></span>
+                </div>
+
+                <!-- Supplier -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-light"><i class="fas fa-truck text-info"></i> Supplier:</label>
+                    <input type="text" class="form-control bg-secondary text-white border-0 rounded" asp-for="Supplier" placeholder="Enter supplier name" />
+                    <span class="text-danger" asp-validation-for="Supplier"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 transition-scale">
+                        <i class="fas fa-save"></i> Save Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .transition-scale {
+        transition: transform 0.3s ease;
+    }
+
+        .transition-scale:hover {
+            transform: scale(1.05);
+        }
+
+    .bg-secondary {
+        background-color: #2c2c2c !important;
+    }
+</style>

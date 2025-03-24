@@ -1,0 +1,86 @@
+﻿@model InventorySystem.Models.ProductSelectViewModel
+
+<div class="container mt-5">
+    <!-- Page Header -->
+    <div class="text-center mb-4">
+        <h1 class="text-primary fw-bold"><i class="fas fa-exchange-alt"></i> Create Transaction</h1>
+        <p class="text">Select a product and transaction type to proceed.</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card shadow-lg border-0 rounded p-4 bg-dark text-light">
+        <div class="card-body">
+            <form id="transactionForm">
+                @Html.AntiForgeryToken()
+
+                <!-- Product Dropdown -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold"><i class="fas fa-box text-warning"></i> Product</label>
+                    <select id="SelectedProductID" class="form-control rounded border-2 bg-secondary text-light">
+                        @foreach (var product in Model.Products)
+                        {
+                            <option value="@product.Value">@product.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Transaction Type Dropdown -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold"><i class="fas fa-list text-success"></i> Transaction Type</label>
+                    <select id="Transaction_Type" class="form-control rounded border-2 bg-secondary text-light">
+                        <option value="IN">Stock In</option>
+                        <option value="OUT">Stock Out</option>
+                    </select>
+                </div>
+
+                <!-- Quantity Input -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold"><i class="fas fa-sort-numeric-up text-info"></i> Quantity</label>
+                    <input type="number" id="Quantity" class="form-control rounded border-2 bg-secondary text-light" min="1" required />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 shadow"><i class="fas fa-save"></i> Save Transaction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div id="errorAlert" class="alert alert-danger mt-4 d-none shadow"></div>
+</div>
+
+<!-- jQuery & AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#transactionForm").submit(function (event) {
+            event.preventDefault();
+
+            var transactionData = {
+                SelectedProductID: $("#SelectedProductID").val(),
+                Transaction_Type: $("#Transaction_Type").val(),
+                Quantity: parseInt($("#Quantity").val())
+            };
+
+            $.ajax({
+                url: "@Url.Action("Create", "Transaction")",
+                type: "POST",
+                contentType: "application/json",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                data: JSON.stringify(transactionData),
+                success: function (response) {
+                    if (response.success) {
+                        location.reload(); // Refresh page on success
+                    } else {
+                        $("#errorAlert").text(response.message).removeClass("d-none");
+                    }
+                },
+                error: function () {
+                    $("#errorAlert").text("An error occurred. Please try again.").removeClass("d-none");
+                }
+            });
+        });
+    });
+</script>
